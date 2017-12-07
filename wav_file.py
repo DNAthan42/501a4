@@ -1,7 +1,7 @@
 import sys
 import struct
 
-class Header():
+class Wave():
 
     def __init__(self):
         self.ChunkID = ""
@@ -41,7 +41,7 @@ class Header():
 
 ####main
 if __debug__:
-    test = Header(sys.argv[1])
+    test = Wave(sys.argv[1])
     #Modified from Meitham's answer at
     #https://stackoverflow.com/questions/11637293/iterate-over-object-attributes-in-python
     for a in dir(test):
