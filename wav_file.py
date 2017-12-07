@@ -54,7 +54,7 @@ class Wave():
             #need the data's size
             Subchunk2Size = struct.unpack('<I', fd.read(4))[0]
             if __debug__:
-                print(str(Subchunk2Size/self.BlockAlign))
+                print("Getting {} samples of {} bytes".format(str(Subchunk2Size/self.BlockAlign), int(self.BitsPerSample/8)))
 
             #load all the data into the array
             arr = []
