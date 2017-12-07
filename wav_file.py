@@ -31,13 +31,13 @@ class Wave():
                 raise ValueError("Unsupported Format")
             self.Subchunk1ID = fd.read(4).decode()
             if self.Subchunk1ID != "fmt ":
-                raise ValueError("Invalid Subchunk1ID: " + Subchunk1ID)
+                raise ValueError("Invalid Subchunk1ID: " + self.Subchunk1ID)
             self.Subchunk1Size = struct.unpack('<I', fd.read(4))[0]
             self.AudioFormat, self.NumChannels = struct.unpack('<HH', fd.read(4))
             if self.AudioFormat != 1:
-                raise ValueError("Unsupported AudioFormat: " + AudioFormat)
+                raise ValueError("Unsupported AudioFormat: " + self.AudioFormat)
             if self.NumChannels != 1:
-                raise ValueError("Unsupported NumChannels: " + NumChannels)
+                raise ValueError("Unsupported NumChannels: " + self.NumChannels)
             self.SampleRate, self.ByteRate = struct.unpack('<II', fd.read(8))
             self.BlockAlign, self.BitsPerSample = struct.unpack('HH', fd.read(4))
 
