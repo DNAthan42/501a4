@@ -45,7 +45,7 @@ class Wave():
 
         #open the file
         with open(self.filename, 'rb') as fd:
-            print(fd.seek(20 + self.Subchunk1Size, 0)) #skip over the header
+            fd.seek(20 + self.Subchunk1Size, 0) #skip over the header
             #double check we're at the data chunk
             id = fd.read(4).decode()
             if id != "data":
@@ -57,18 +57,19 @@ class Wave():
                 print("Getting {} samples of {} bytes".format(str(Subchunk2Size/self.BlockAlign), int(self.BitsPerSample/8)))
 
             #load all the data into the array
+            #todo: extend this line for multi channel, h is 2 bytes long
             arr = []
             for i in range(0, Subchunk2Size, self.BlockAlign):
-                arr.append(fd.read(self.BlockAlign))
+                arr.append(struct.unpack('<h', fd.read(self.BlockAlign))[0])
 
         return arr
 
 ####main
-if __debug__:
-    test = Wave(sys.argv[1])
-    #Modified from Meitham's answer at
-    #https://stackoverflow.com/questions/11637293/iterate-over-object-attributes-in-python
-    for a in dir(test):
-        if not a.startswith('__') and not callable(getattr(test,a)):
-            print("{}: {}".format(a, getattr(test, a)))
-    print(len(test.getData()))
+# if __debug__:
+#     test = Wave(sys.argv[1])
+#     #Modified from Meitham's answer at
+#     #https://stackoverflow.com/questions/11637293/iterate-over-object-attributes-in-python
+#     for a in dir(test):
+#         if not a.startswith('__') and not callable(getattr(test,a)):
+#             print("{}: {}".format(a, getattr(test, a)))
+#     print(len(test.getData()))

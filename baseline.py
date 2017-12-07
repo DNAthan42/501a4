@@ -1,14 +1,12 @@
 import sys
-import wav_file
+import wav_file  
 
-####MAIN
+def scale(arr, bytes):
+    #get the maximum value of a signed number that is bytes bytes long
+    max = 2 ** (8*bytes) - 1
 
-#Create a Wave object from the command line argument
-waveFile = wav_file.Wave(sys.argv[1])
-
-impulseFile = wav_file.Wave(sys.argv[2])
-
-
+    for i in range (0, len(arr)):
+        arr[i] /= max
 
 def convolve(x, h):
     P = len(x) + len(y)
@@ -25,3 +23,21 @@ def convolve(x, h):
             y[n+m] += x[n] * h[m]
     
     return y
+
+####MAIN
+
+#Create a Wave object from the command line argument
+waveFile = wav_file.Wave(sys.argv[1])
+
+impulseFile = wav_file.Wave(sys.argv[2])
+
+x = waveFile.getData()
+h = impulseFile.getData()
+
+scale(x, waveFile.BitsPerSample)
+scale(h, impulseFile.BitsPerSample)
+
+if __debug__:
+    for i in range(0,len(x)):
+        if x[i] > 1.0 or x[i] < -1.0:
+            raise ValueError("Post scale value out of range in x")
