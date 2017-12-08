@@ -50,6 +50,7 @@ def convolve(x, h):
     #double pad until it is larger than the bigger arr
     while pad < biggerArg:
         pad = pad << 1
+    dubPad = pad << 1
 
     print("starting padding")    
     #pad to double size for FFT
@@ -61,10 +62,9 @@ def convolve(x, h):
 
     print("done")
 
-    dubPad = 2* pad
     #convert to ctypes for fft
-    c_x_pad = (ctypes.c_double * dubPad)(*x)
-    c_h_pad = (ctypes.c_double * dubPad)(*h)
+    c_x_pad = (ctypes.c_double * dubPad)(*x_pad)
+    c_h_pad = (ctypes.c_double * dubPad)(*h_pad)
     
     print("starting ffts")
     #run fft
@@ -78,7 +78,7 @@ def convolve(x, h):
     y = []
     for i in range(0, 2*pad, 2):
         y.append((c_x_pad[i] * c_h_pad[i]) - (c_x_pad[i+1] * c_h_pad[i+1]))
-        y.append((c_x_pad[i+1] * c_h_pad[i]) + (c_x_pad[i] * c_h_pad[i+1]))
+        y.append((c_x_pad[i] * c_h_pad[i+1]) + (c_x_pad[i+1] * c_h_pad[i]))
     print("done")
 
     print("ifft")
@@ -89,8 +89,13 @@ def convolve(x, h):
     lib.four1(c_y_pad, pad, -1)
     print("done")
 
+    print("downscaling y")
+    y = c_y_pad[:len(x) + len(h) - 1]
+    for i in range(0, len(y)):
+        y[i] /= pad
+
     #truncate and return
-    return c_y_pad[:len(x) + len(h) - 1]
+    return y
 
 
 ####MAIN

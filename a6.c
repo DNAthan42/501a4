@@ -27,6 +27,8 @@ void four1(double data[], int nn, int isign)
     double wtemp, wr, wpr, wpi, wi, theta;
     double tempr, tempi;
 
+    data--;
+
     n = nn << 1;
     j = 1;
 
