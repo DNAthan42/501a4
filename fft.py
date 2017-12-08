@@ -49,35 +49,45 @@ def convolve(x, h):
     pad = 1
     #double pad until it is larger than the bigger arr
     while pad < biggerArg:
-        pad << 1
-    
+        pad = pad << 1
+
+    print("starting padding")    
     #pad to double size for FFT
     x_pad = []
     h_pad = []
-    i = 0
-    while i < 2*pad:
-        x_pad[i] = x[i] if i < len(x) else 0.0
-        h_pad[i] = h[i] if i < len(h) else 0.0
+    for i in range(0, 2*pad):
+        x_pad.append(x[i] if i < len(x) else 0.0)
+        h_pad.append(h[i] if i < len(h) else 0.0)
 
+    print("done")
+
+    dubPad = 2* pad
     #convert to ctypes for fft
-    c_x_pad = (ctypes.c_double * 2 * pad)(*x)
-    c_h_pad = (ctypes.c_double * 2 * pad)(*h)
+    c_x_pad = (ctypes.c_double * dubPad)(*x)
+    c_h_pad = (ctypes.c_double * dubPad)(*h)
     
+    print("starting ffts")
     #run fft
     lib.four1(c_x_pad, pad, 1)
+    print("done x")
     lib.four1(c_h_pad, pad, 1)
+    print("done h")
 
+    print("starting complex mul")
     #complex multiplication
     y = []
     for i in range(0, 2*pad, 2):
-        y[i] = (c_x_pad[i] * c_h_pad[i]) - (c_x_pad[i+1] * c_h_pad[i+1])
-        y[i+1] = (c_x_pad[i+1] * c_h_pad[i+1]) + (c_x_pad[i] * c_h_pad[i])
+        y.append((c_x_pad[i] * c_h_pad[i]) - (c_x_pad[i+1] * c_h_pad[i+1]))
+        y.append((c_x_pad[i+1] * c_h_pad[i]) + (c_x_pad[i] * c_h_pad[i+1]))
+    print("done")
 
+    print("ifft")
     #convert to ctypes for ifft
-    c_y_pad = (ctypes.c_double * 2 * pad)(*y)
+    c_y_pad = (ctypes.c_double * dubPad)(*y)
 
     #run ifft
     lib.four1(c_y_pad, pad, -1)
+    print("done")
 
     #truncate and return
     return c_y_pad[:len(x) + len(h) - 1]

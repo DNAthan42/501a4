@@ -10,6 +10,8 @@ def getAbsMax(arr):
     if absxmin > xmax:
         xmax = absxmin
 
+    return xmax
+
 #if direction >= 0, scales from bytes' size to -1<i<1
 #otherwise scales from -1<i<1 to bytes' size
 def scale(arr, bits, direction=1):
