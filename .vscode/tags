@@ -7,19 +7,39 @@
 Wave	../wav_file.py	/^class Wave():$/;"	kind:class	line:4
 __init__	../wav_file.py	/^    def __init__(self):$/;"	kind:member	line:6
 __init__	../wav_file.py	/^    def __init__(self, filename):$/;"	kind:member	line:19
+absxmin	../baseline.py	/^absxmin = xmin * -1$/;"	kind:variable	line:94
+absymin	../baseline.py	/^absymin = ymin * -1$/;"	kind:variable	line:116
+absymin	../baseline.py	/^absymin = ymin * -1$/;"	kind:variable	line:80
 baseline.py	../baseline.py	1;"	kind:file	line:1
-convolve	../baseline.py	/^def convolve(x, h):$/;"	kind:function	line:16
+convolve	../baseline.py	/^def convolve(x, h):$/;"	kind:function	line:18
+ctypes	../baseline.py	/^import ctypes$/;"	kind:namespace	line:3
 getData	../wav_file.py	/^    def getData(self):$/;"	kind:member	line:45
 getDataSize	../wav_file.py	/^    def getDataSize(self):$/;"	kind:member	line:74
-h	../baseline.py	/^h = impulseFile.getData()$/;"	kind:variable	line:43
-impulseFile	../baseline.py	/^impulseFile = wav_file.Wave(sys.argv[2])$/;"	kind:variable	line:40
-scale	../baseline.py	/^def scale(arr, bytes, direction=1):$/;"	kind:function	line:6
+h	../baseline.py	/^h = impulseFile.getData()$/;"	kind:variable	line:59
+impulseFile	../baseline.py	/^impulseFile = wav_file.Wave(sys.argv[2])$/;"	kind:variable	line:56
+mult	../baseline.py	/^mult = xmax\/ymax$/;"	kind:variable	line:101
+scale	../baseline.py	/^def scale(arr, bits, direction=1):$/;"	kind:function	line:7
 struct	../wav_file.py	/^import struct$/;"	kind:namespace	line:2
 sys	../baseline.py	/^import sys$/;"	kind:namespace	line:1
 sys	../wav_file.py	/^import sys$/;"	kind:namespace	line:1
-wav_file	../baseline.py	/^import wav_file  $/;"	kind:namespace	line:2
+wav_file	../baseline.py	/^import wav_file$/;"	kind:namespace	line:2
 wav_file.py	../wav_file.py	1;"	kind:file	line:1
-waveFile	../baseline.py	/^waveFile = wav_file.Wave(sys.argv[1])$/;"	kind:variable	line:38
+waveFile	../baseline.py	/^waveFile = wav_file.Wave(sys.argv[1])$/;"	kind:variable	line:54
 writeFile	../wav_file.py	/^    def writeFile(self, filename, data):$/;"	kind:member	line:86
-x	../baseline.py	/^x = waveFile.getData()$/;"	kind:variable	line:42
-y	../baseline.py	/^y = convolve(x, h)$/;"	kind:variable	line:48
+x	../baseline.py	/^x = waveFile.getData()$/;"	kind:variable	line:58
+xmax	../baseline.py	/^        xmax = i$/;"	kind:variable	line:93
+xmax	../baseline.py	/^    xmax = absxmin$/;"	kind:variable	line:96
+xmax	../baseline.py	/^xmax = 0.0$/;"	kind:variable	line:88
+xmin	../baseline.py	/^        xmin = i$/;"	kind:variable	line:91
+xmin	../baseline.py	/^xmin = 0.0$/;"	kind:variable	line:87
+y	../baseline.py	/^y = convolve(x, h)$/;"	kind:variable	line:66
+ymax	../baseline.py	/^        ymax = i$/;"	kind:variable	line:115
+ymax	../baseline.py	/^        ymax = i$/;"	kind:variable	line:79
+ymax	../baseline.py	/^    ymax = absymin$/;"	kind:variable	line:118
+ymax	../baseline.py	/^    ymax = absymin$/;"	kind:variable	line:82
+ymax	../baseline.py	/^ymax = 0.0$/;"	kind:variable	line:110
+ymax	../baseline.py	/^ymax = 0.0$/;"	kind:variable	line:74
+ymin	../baseline.py	/^        ymin = i$/;"	kind:variable	line:113
+ymin	../baseline.py	/^        ymin = i$/;"	kind:variable	line:77
+ymin	../baseline.py	/^ymin = 0.0$/;"	kind:variable	line:109
+ymin	../baseline.py	/^ymin = 0.0$/;"	kind:variable	line:73

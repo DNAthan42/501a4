@@ -27,24 +27,15 @@ def convolve(x, h):
 
     #convert x, h, y to float arrays
     c_y = (ctypes.c_float * P)(*y)
-    # print("created y")
     c_x = (ctypes.c_float * len(x))(*x)
     c_h = (ctypes.c_float * len(h))(*h)
     c_P = (ctypes.c_uint(P))
 
-    # print(c_y[len(x) + 10000])
-
-    # print("converted x, h")
-    # print(len(c_y))
-
+    #call the function in C because python performance is horrible
     lib.convolve(c_x, len(x), c_h, len(h), c_y, c_P)
 
-    # print(c_y[len(x) + 10000])
     #convert y back to python types
     y = [c_y[i] for i in range(0,P)]
-
-    # print(len(y))
-    # print(y[len(x) + 10000])
     
     return y
 
@@ -61,13 +52,8 @@ h = impulseFile.getData()
 scale(x, waveFile.BitsPerSample)
 scale(h, impulseFile.BitsPerSample)
 
-print("len(x)", len(x))
-print("len(h)", len(h))
 y = convolve(x, h)
-print("len(x)", len(x))
-print("len(h)", len(h))
-print("len(y)", len(y))
-# print(y[10000 + 10000])
+
 #normalize y
 #get furthest out of range
 ymin = 0.0
@@ -104,7 +90,6 @@ for i in range(0, len(y)):
     y[i] *= mult
 
 scale(y, waveFile.BitsPerSample, -1)
-# print(y[20000])
 
 ymin = 0.0
 ymax = 0.0
@@ -120,10 +105,3 @@ if absymin > ymax:
 print("ymax", ymax)
 
 waveFile.writeFile("convOut.wav", y)
-
-# if __debug__:
-#     print("startDebug")
-#     for i in range(0,len(x)):
-#         if x[i] > 1.0 or x[i] < -1.0:
-#             raise ValueError("Post scale value out of range in x")
-#     print("endDebug")
