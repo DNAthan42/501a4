@@ -15,21 +15,28 @@ def scale(arr, bytes, direction=1):
 
 
 def convolve(x, h):
-    P = len(x) 
-    P += len(h)
+    #load the c ver file
+    lib = ctypes.CDLL("liba6.so")
+    P = len(x) + len(h) -1
     y = []
 
     #create output buffer
     for n in range(0, P):
         y.append(0.0)
 
-    #outer loop, process each input value x[n] in turn
-    for n in range(0, len(x)):
-        if n % 1000 == 0:
-            print(n)
-        #inner loop, process x[n] with each sample of h[n]
-        for m in range(0, len(h)):
-            y[n+m] += x[n] * h[m]
+    #convert x, h, y to float arrays
+    c_y = (ctypes.c_float * P)(*y)
+    print("created y")
+    c_x = (ctypes.c_float * len(x))(*x)
+    c_h = (ctypes.c_float * len(h))(*h)
+    c_P = (ctypes.c_uint(P))
+
+    print("converted x, h")
+
+    lib.convolve(c_x, len(x), c_h, len(h), c_y, c_P)
+
+    #convert y back to python types
+    y = [c_y[i] for i in range(0,P)]
     
     return y
 
