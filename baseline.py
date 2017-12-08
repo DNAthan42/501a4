@@ -39,6 +39,20 @@ def convolve(x, h):
     
     return y
 
+def getAbsMax(arr):
+    xmin = 0.0
+    xmax = 0.0
+    for i in arr:
+        if i < xmin:
+            xmin = i
+        elif i > xmax:
+            xmax = i
+    absxmin = xmin * -1
+    if absxmin > xmax:
+        xmax = absxmin
+
+    return xmax
+
 ####MAIN
 
 #Create a Wave object from the command line argument
@@ -56,31 +70,11 @@ y = convolve(x, h)
 
 #normalize y
 #get furthest out of range
-ymin = 0.0
-ymax = 0.0
-for i in y:
-    if i < ymin:
-        ymin = i
-    elif i > ymax:
-        ymax = i
-absymin = ymin * -1
-if absymin > ymax:
-    ymax = absymin
-
+ymax = getAbsMax(y)
 print("ymax", ymax)
 
 #get max of original
-xmin = 0.0
-xmax = 0.0
-for i in x:
-    if i < xmin:
-        xmin = i
-    elif i > xmax:
-        xmax = i
-absxmin = xmin * -1
-if absxmin > xmax:
-    xmax = absxmin
-
+xmax = getAbsMax(x)
 print("xmax", xmax)
 
 #scale y according to greatest out of range
@@ -89,19 +83,10 @@ print("mult", mult)
 for i in range(0, len(y)):
     y[i] *= mult
 
+#-1 to scale back up from float to short
 scale(y, waveFile.BitsPerSample, -1)
 
-ymin = 0.0
-ymax = 0.0
-for i in y:
-    if i < ymin:
-        ymin = i
-    elif i > ymax:
-        ymax = i
-absymin = ymin * -1
-if absymin > ymax:
-    ymax = absymin
-
+ymax = getAbsMax(y)
 print("ymax", ymax)
 
 waveFile.writeFile("convOut.wav", y)
