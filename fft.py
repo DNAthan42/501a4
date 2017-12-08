@@ -1,8 +1,9 @@
 import sys
 import wav_file
 import ctypes
+from common import *
 
-def fft(inFile, irFile, outFile):
+def fft(inName, irName, outName):
     #Load wave file information from the arguments
     waveFile = wav_file.Wave(inName)
     impulseFile = wav_file.Wave(irName)
