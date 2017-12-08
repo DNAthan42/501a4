@@ -53,7 +53,7 @@ def getAbsMax(arr):
 
     return xmax
 
-def baseline(inName, irName, outName)
+def baseline(inName, irName, outName):
     #Create a Wave object from the command line argument
     waveFile = wav_file.Wave(inName)
 
