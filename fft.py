@@ -14,29 +14,13 @@ def fft(inName, irName, outName):
 
     scale(x, waveFile.BitsPerSample)
     scale(h, impulseFile.BitsPerSample)
-
     y = convolve(x, h)
 
     #normalize y
-    #get furthest out of range
-    ymax = getAbsMax(y)
-    print("ymax", ymax)
-
-    #get max of original
-    xmax = getAbsMax(x)
-    print("xmax", xmax)
-
-    #scale y according to greatest out of range
-    mult = xmax/ymax
-    print("mult", mult)
-    for i in range(0, len(y)):
-        y[i] *= mult
+    normalize(y, x)
 
     #-1 to scale back up from float to short
     scale(y, waveFile.BitsPerSample, -1)
-
-    ymax = getAbsMax(y)
-    print("ymax", ymax)
 
     waveFile.writeFile(outName, y)
 
@@ -52,45 +36,45 @@ def convolve(x, h):
         pad = pad << 1
     dubPad = pad << 1
 
-    print("starting padding")    
+    print("padding", flush=True, end='')    
     #pad to double size for FFT
     x_pad = []
     h_pad = []
-    for i in range(0, 2*pad):
+    for i in range(0, dubPad):
         x_pad.append(x[i] if i < len(x) else 0.0)
         h_pad.append(h[i] if i < len(h) else 0.0)
 
-    print("done")
+    if len(x_pad) != dubPad or len(h_pad) != dubPad:
+        print(" post padding size is not expected val.")
+        sys.exit(-1)
 
     #convert to ctypes for fft
     c_x_pad = (ctypes.c_double * dubPad)(*x_pad)
     c_h_pad = (ctypes.c_double * dubPad)(*h_pad)
     
-    print("starting ffts")
+    print(" -> ffts", flush=True, end='')
     #run fft
     lib.four1(c_x_pad, pad, 1)
-    print("done x")
+    print(" x, ", flush=True, end='')
     lib.four1(c_h_pad, pad, 1)
-    print("done h")
+    print("h", flush=True, end='')
 
-    print("starting complex mul")
+    print(" -> complex mul", flush=True, end='')
     #complex multiplication
     y = []
-    for i in range(0, 2*pad, 2):
+    for i in range(0, dubPad, 2):
         y.append((c_x_pad[i] * c_h_pad[i]) - (c_x_pad[i+1] * c_h_pad[i+1]))
         y.append((c_x_pad[i] * c_h_pad[i+1]) + (c_x_pad[i+1] * c_h_pad[i]))
-    print("done")
 
-    print("ifft")
+    print(" -> ifft", flush=True, end='')
     #convert to ctypes for ifft
     c_y_pad = (ctypes.c_double * dubPad)(*y)
 
     #run ifft
     lib.four1(c_y_pad, pad, -1)
-    print("done")
 
-    print("downscaling y")
-    y = c_y_pad[:len(x) + len(h) - 1]
+    print(" -> downscaling y")
+    y = [c_y_pad[i] for i in range(0, len(x) + len(h) - 1)]
     for i in range(0, len(y)):
         y[i] /= pad
 

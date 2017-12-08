@@ -42,29 +42,14 @@ def baseline(inName, irName, outName):
     y = convolve(x, h)
 
     #normalize y
-    #get furthest out of range
-    ymax = getAbsMax(y)
-    print("ymax", ymax)
-
-    #get max of original
-    xmax = getAbsMax(x)
-    print("xmax", xmax)
-
-    #scale y according to greatest out of range
-    mult = xmax/ymax
-    print("mult", mult)
-    for i in range(0, len(y)):
-        y[i] *= mult
+    normalize(y, x)
 
     #-1 to scale back up from float to short
     scale(y, waveFile.BitsPerSample, -1)
 
-    ymax = getAbsMax(y)
-    print("ymax", ymax)
-
     waveFile.writeFile(outName, y)
 
-    ####MAIN
+####MAIN
 
 if (len(sys.argv) != 4):
     sys.stderr.write("Usage: baseline inputfile IRfile outputfile\n")

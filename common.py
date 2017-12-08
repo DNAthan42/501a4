@@ -1,3 +1,5 @@
+import wav_file
+
 def getAbsMax(arr):
     xmin = 0.0
     xmax = 0.0
@@ -24,3 +26,18 @@ def scale(arr, bits, direction=1):
             arr[i] /= max
         else:
             arr[i] = int(arr[i] * max)
+
+def normalize(l, to):
+    #get furthest out of range
+    ymax = getAbsMax(l)
+    print("ymax", ymax)
+
+    #get max of original
+    xmax = getAbsMax(to)
+    print("xmax", xmax)
+
+    #scale y according to greatest out of range
+    mult = xmax/ymax
+    print("mult", mult)
+    for i in range(0, len(l)):
+        l[i] *= mult
