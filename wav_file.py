@@ -22,6 +22,7 @@ class Wave():
 
         #open file for reading bytes
         with open(filename, 'rb') as fd:
+
             self.ChunkID = fd.read(4).decode()
             if self.ChunkID != "RIFF":
                 raise ValueError("Unsupported ChunkID")
@@ -59,10 +60,61 @@ class Wave():
             #load all the data into the array
             #todo: extend this line for multi channel, h is 2 bytes long
             arr = []
-            for i in range(0, Subchunk2Size, self.BlockAlign):
-                arr.append(struct.unpack('<h', fd.read(self.BlockAlign))[0])
+            for i in range(0, Subchunk2Size):
+                a = fd.read(self.BlockAlign)
+                if not a:
+                    print ("i" + str(i))
+                    break
+                arr.append(struct.unpack('<h', a)[0])
+
+            print("i" + str(i))
 
         return arr
+
+    def getDataSize(self):
+        #open the file
+        with open(self.filename, 'rb') as fd:
+            fd.seek(20 + self.Subchunk1Size, 0) #skip over the header
+            #double check we're at the data chunk
+            id = fd.read(4).decode()
+            if id != "data":
+                raise ValueError("FD not at start of data chunk. Val: " + id)
+            
+            #need the data's size
+            return struct.unpack('<I', fd.read(4))[0]
+
+    def writeFile(self, filename, data):
+
+        #recalculate file size and data chunk size
+        Subchunk2Size = len(data) * self.BlockAlign
+        self.ChunkSize = 4 + 8 + self.Subchunk1Size + 8 + Subchunk2Size
+
+        with open(filename, 'wb') as fd:
+            print(len(self.ChunkID), len(self.Format), len(self.Subchunk1ID), self.Subchunk1Size)
+            #copy in the header
+            fd.write(self.ChunkID.encode('ascii'))
+            fd.write(struct.pack('<I', self.ChunkSize))
+            fd.write(self.Format.encode('ascii'))
+            fd.write(self.Subchunk1ID.encode('ascii'))
+            fd.write(struct.pack('<I', self.Subchunk1Size))
+            fd.write(struct.pack('<H', self.AudioFormat))
+            fd.write(struct.pack('<H', self.NumChannels))
+            fd.write(struct.pack('<I', self.SampleRate))
+            fd.write(struct.pack('<I', self.ByteRate))
+            fd.write(struct.pack('<H', self.BlockAlign))
+            fd.write(struct.pack('<H', self.BitsPerSample))
+            fd.write(b"\x00\x00")
+
+            #write the data sub chunk
+            fd.write(b"data")
+            fd.write(struct.pack('<I', Subchunk2Size))
+            
+            #dump array to file
+            #todo extend for bitspersample != 16
+            for i in range(0, len(data)):
+                fd.write(struct.pack('<h', data[i]))
+            print("writei " + str(i))
+
 
 ####main
 # if __debug__:
@@ -72,4 +124,4 @@ class Wave():
 #     for a in dir(test):
 #         if not a.startswith('__') and not callable(getattr(test,a)):
 #             print("{}: {}".format(a, getattr(test, a)))
-#     print(len(test.getData()))
+#     test.writeFile("out.wav", test.getData())

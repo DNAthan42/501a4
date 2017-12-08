@@ -4,4 +4,22 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-reader.py	../reader.py	1;"	kind:file	line:1
+Wave	../wav_file.py	/^class Wave():$/;"	kind:class	line:4
+__init__	../wav_file.py	/^    def __init__(self):$/;"	kind:member	line:6
+__init__	../wav_file.py	/^    def __init__(self, filename):$/;"	kind:member	line:19
+baseline.py	../baseline.py	1;"	kind:file	line:1
+convolve	../baseline.py	/^def convolve(x, h):$/;"	kind:function	line:16
+getData	../wav_file.py	/^    def getData(self):$/;"	kind:member	line:45
+getDataSize	../wav_file.py	/^    def getDataSize(self):$/;"	kind:member	line:74
+h	../baseline.py	/^h = impulseFile.getData()$/;"	kind:variable	line:43
+impulseFile	../baseline.py	/^impulseFile = wav_file.Wave(sys.argv[2])$/;"	kind:variable	line:40
+scale	../baseline.py	/^def scale(arr, bytes, direction=1):$/;"	kind:function	line:6
+struct	../wav_file.py	/^import struct$/;"	kind:namespace	line:2
+sys	../baseline.py	/^import sys$/;"	kind:namespace	line:1
+sys	../wav_file.py	/^import sys$/;"	kind:namespace	line:1
+wav_file	../baseline.py	/^import wav_file  $/;"	kind:namespace	line:2
+wav_file.py	../wav_file.py	1;"	kind:file	line:1
+waveFile	../baseline.py	/^waveFile = wav_file.Wave(sys.argv[1])$/;"	kind:variable	line:38
+writeFile	../wav_file.py	/^    def writeFile(self, filename, data):$/;"	kind:member	line:86
+x	../baseline.py	/^x = waveFile.getData()$/;"	kind:variable	line:42
+y	../baseline.py	/^y = convolve(x, h)$/;"	kind:variable	line:48
