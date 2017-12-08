@@ -111,9 +111,13 @@ class Wave():
             
             #dump array to file
             #todo extend for bitspersample != 16
-            for i in range(0, len(data)):
-                fd.write(struct.pack('<h', data[i]))
-            print("writei " + str(i))
+            try:
+                for i in range(0, len(data)):
+                    fd.write(struct.pack('<h', data[i]))
+                print("writei " + str(i))
+            except struct.error as e:
+                print (i, data[i])
+                raise e
 
 
 ####main
