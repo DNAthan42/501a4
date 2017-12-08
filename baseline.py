@@ -54,11 +54,11 @@ def getAbsMax(arr):
     return xmax
 
 def baseline(inName, irName, outName):
-    #Create a Wave object from the command line argument
+    #Load wave file information from the arguments
     waveFile = wav_file.Wave(inName)
-
     impulseFile = wav_file.Wave(irName)
 
+    #Pull the data arrays from the files
     x = waveFile.getData()
     h = impulseFile.getData()
 
