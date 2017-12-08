@@ -53,40 +53,48 @@ def getAbsMax(arr):
 
     return xmax
 
-####MAIN
+def baseline(inName, irName, outName)
+    #Create a Wave object from the command line argument
+    waveFile = wav_file.Wave(inName)
 
-#Create a Wave object from the command line argument
-waveFile = wav_file.Wave(sys.argv[1])
+    impulseFile = wav_file.Wave(irName)
 
-impulseFile = wav_file.Wave(sys.argv[2])
+    x = waveFile.getData()
+    h = impulseFile.getData()
 
-x = waveFile.getData()
-h = impulseFile.getData()
+    scale(x, waveFile.BitsPerSample)
+    scale(h, impulseFile.BitsPerSample)
 
-scale(x, waveFile.BitsPerSample)
-scale(h, impulseFile.BitsPerSample)
+    y = convolve(x, h)
 
-y = convolve(x, h)
+    #normalize y
+    #get furthest out of range
+    ymax = getAbsMax(y)
+    print("ymax", ymax)
 
-#normalize y
-#get furthest out of range
-ymax = getAbsMax(y)
-print("ymax", ymax)
+    #get max of original
+    xmax = getAbsMax(x)
+    print("xmax", xmax)
 
-#get max of original
-xmax = getAbsMax(x)
-print("xmax", xmax)
+    #scale y according to greatest out of range
+    mult = xmax/ymax
+    print("mult", mult)
+    for i in range(0, len(y)):
+        y[i] *= mult
 
-#scale y according to greatest out of range
-mult = xmax/ymax
-print("mult", mult)
-for i in range(0, len(y)):
-    y[i] *= mult
+    #-1 to scale back up from float to short
+    scale(y, waveFile.BitsPerSample, -1)
 
-#-1 to scale back up from float to short
-scale(y, waveFile.BitsPerSample, -1)
+    ymax = getAbsMax(y)
+    print("ymax", ymax)
 
-ymax = getAbsMax(y)
-print("ymax", ymax)
+    waveFile.writeFile(outName, y)
 
-waveFile.writeFile("convOut.wav", y)
+    ####MAIN
+
+if (len(sys.argv) != 4):
+    sys.stderr.write("Usage: baseline inputfile IRfile outputfile\n")
+    sys.stderr.flush()
+    sys.exit(0)
+
+baseline(sys.argv[1], sys.argv[2], sys.argv[3])
