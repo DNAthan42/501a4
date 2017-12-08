@@ -11,7 +11,7 @@ void convolve(float x[], int N, float h[], int M, float y[], int P){
             printf("n: %d\n", n);
         }
         for (m = 0; m < M; m++){
-            y[n+m] += x[n] * h[n];
+            y[n+m] += x[n] * h[m];
         }
     }
 }
