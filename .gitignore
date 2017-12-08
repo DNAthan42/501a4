@@ -1,1 +1,5 @@
 test.c
+
+# ignore c output files
+*.o
+*.so
